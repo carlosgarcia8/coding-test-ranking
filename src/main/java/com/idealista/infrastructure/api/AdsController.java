@@ -2,27 +2,36 @@ package com.idealista.infrastructure.api;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.idealista.infrastructure.service.IAdService;
+
 
 @RestController
 public class AdsController {
+	
+	@Autowired
+	private IAdService adService;
 
-    //TODO añade url del endpoint
-    public ResponseEntity<List<QualityAd>> qualityListing() {
-        //TODO rellena el cuerpo del método
-        return ResponseEntity.notFound().build();
+	@GetMapping(value = "/ads/qualityListing")
+    public ResponseEntity<List<QualityAd>> qualityListing(@RequestParam(required = false) Boolean irrelevantAds) {
+		List<QualityAd> qualityAds = adService.getQualityListing(irrelevantAds);
+        return ResponseEntity.ok(qualityAds);
     }
 
-    //TODO añade url del endpoint
-    public ResponseEntity<List<PublicAd>> publicListing() {
-        //TODO rellena el cuerpo del método
-        return ResponseEntity.notFound().build();
+	@GetMapping(value = "/ads/publicListing")
+    public ResponseEntity<List<PublicAd>> publicListing(@RequestParam(required = false) Boolean orderBy) {
+		List<PublicAd> publicAds = adService.getPublicListing(orderBy);
+        return ResponseEntity.ok(publicAds);
     }
 
-    //TODO añade url del endpoint
+	@GetMapping(value = "/ads/calculateScore")
     public ResponseEntity<Void> calculateScore() {
-        //TODO rellena el cuerpo del método
-        return ResponseEntity.notFound().build();
+		adService.calculateScore();
+        return ResponseEntity.noContent().build();
     }
 }
