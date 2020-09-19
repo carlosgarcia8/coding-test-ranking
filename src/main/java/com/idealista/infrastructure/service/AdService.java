@@ -6,7 +6,7 @@ import com.idealista.infrastructure.api.PublicAd;
 import com.idealista.infrastructure.api.QualityAd;
 import com.idealista.infrastructure.persistence.AdVO;
 
-public interface IAdService {
+public interface AdService {
 
 	public List<QualityAd> getQualityListing(Boolean irrelevantAds);
 

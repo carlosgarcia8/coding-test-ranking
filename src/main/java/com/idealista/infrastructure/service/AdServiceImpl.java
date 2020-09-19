@@ -1,4 +1,4 @@
-package com.idealista.infrastructure.service.impl;
+package com.idealista.infrastructure.service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -18,10 +18,9 @@ import com.idealista.infrastructure.mapper.AdMapper;
 import com.idealista.infrastructure.persistence.AdVO;
 import com.idealista.infrastructure.persistence.InMemoryPersistence;
 import com.idealista.infrastructure.persistence.PictureVO;
-import com.idealista.infrastructure.service.IAdService;
 
 @Service
-public class AdServiceImpl implements IAdService {
+public class AdServiceImpl implements AdService {
 	private static final Logger logger = LoggerFactory.getLogger(AdServiceImpl.class);
 	
 	@Autowired
@@ -44,7 +43,9 @@ public class AdServiceImpl implements IAdService {
 		calculateAds.stream()
 			.filter(ad -> ad.getScore() > 40)
 			.forEach(ad -> {
-				publicListing.add(adMapper.convertAdVOToPublicAd(ad));
+				PublicAd publicAd = adMapper.convertAdVOToPublicAd(ad);
+				publicAd.setPictureUrls(obtainPictureUrl(ad));
+				publicListing.add(publicAd);
 			});
 		
 		return publicListing;
@@ -60,12 +61,12 @@ public class AdServiceImpl implements IAdService {
 		calculateAds.stream()
 			.filter(ad -> irrelevantAds != null && irrelevantAds ? true : ad.getScore() > 40 )
 			.forEach(ad -> {
-				qualityListing.add(adMapper.convertAdVOToQualityAd(ad));
+				QualityAd qualityAd = adMapper.convertAdVOToQualityAd(ad);
+				qualityAd.setPictureUrls(obtainPictureUrl(ad));
+				qualityListing.add(qualityAd);
 			});
 		
 		return qualityListing;
-		
-//		return retrieveAds(true).stream().sorted((o1, o2) -> o1.getScore().compareTo(o2.getScore())).collect(Collectors.toList());
 	}
 
 	@Override
@@ -99,6 +100,19 @@ public class AdServiceImpl implements IAdService {
 		if (score < 40) {
 	    	ad.setIrrelevantSince(new Date());
 	    }
+	}
+	
+	public List<String> obtainPictureUrl(AdVO ad) {
+		List<String> pictureUrls = new ArrayList<String>();
+		
+		ad.getPictures().forEach(pictureId -> {
+			inMemoryPersistance.fintPictureById(pictureId)
+				.ifPresent((picture) -> {
+					pictureUrls.add(picture.getUrl());
+				});
+		});
+		
+		return pictureUrls;
 	}
 	
 	private Integer obtainDescriptionScore(AdVO ad) {

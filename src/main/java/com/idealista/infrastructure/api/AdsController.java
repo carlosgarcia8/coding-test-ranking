@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.idealista.infrastructure.service.IAdService;
+import com.idealista.infrastructure.service.AdService;
 
 
 @RestController
 public class AdsController {
 	
 	@Autowired
-	private IAdService adService;
+	private AdService adService;
 
 	@GetMapping(value = "/ads/qualityListing")
     public ResponseEntity<List<QualityAd>> qualityListing(@RequestParam(required = false) Boolean irrelevantAds) {
