@@ -13,23 +13,30 @@ public class InMemoryPersistence {
 
     private List<AdVO> ads;
     private List<PictureVO> pictures;
-    
+
     private List<String> typologyTypesAllowed;
-    
+
     public final String CHALET = "CHALET";
     public final String FLAT = "FLAT";
     public final String GARAGE = "GARAGE";
-    
+
     public InMemoryPersistence() {
         ads = new ArrayList<AdVO>();
-        ads.add(new AdVO(1, CHALET, "Este piso es una ganga, compra, compra, COMPRA!!!!!", Collections.<Integer>emptyList(), 300, null, null, null));
-        ads.add(new AdVO(2, FLAT, "Nuevo ático céntrico recién reformado. No deje pasar la oportunidad y adquiera este ático de lujo", Arrays.asList(4), 300, null, null, null));
+        ads.add(new AdVO(1, CHALET, "Este piso es una ganga, compra, compra, COMPRA!!!!!",
+                Collections.<Integer>emptyList(), 300, null, null, null));
+        ads.add(new AdVO(2, FLAT,
+                "Nuevo ático céntrico recién reformado. No deje pasar la oportunidad y adquiera este ático de lujo",
+                Arrays.asList(4), 300, null, null, null));
         ads.add(new AdVO(3, CHALET, "", Arrays.asList(2), 300, null, null, null));
-        ads.add(new AdVO(4, FLAT, "Ático céntrico muy luminoso y recién reformado, parece nuevo", Arrays.asList(5), 300, null, null, null));
+        ads.add(new AdVO(4, FLAT, "Ático céntrico muy luminoso y recién reformado, parece nuevo", Arrays.asList(5), 300,
+                null, null, null));
         ads.add(new AdVO(5, FLAT, "Pisazo,", Arrays.asList(3, 8), 300, null, null, null));
         ads.add(new AdVO(6, GARAGE, "", Arrays.asList(6), 300, null, null, null));
-        ads.add(new AdVO(7, GARAGE, "Garaje en el centro de Albacete", Collections.<Integer>emptyList(), 300, null, null, null));
-        ads.add(new AdVO(8, CHALET, "Maravilloso chalet situado en lAs afueras de un pequeño pueblo rural. El entorno es espectacular, las vistas magníficas. ¡Cómprelo ahora!", Arrays.asList(1, 7), 300, null, null, null));
+        ads.add(new AdVO(7, GARAGE, "Garaje en el centro de Albacete", Collections.<Integer>emptyList(), 300, null,
+                null, null));
+        ads.add(new AdVO(8, CHALET,
+                "Maravilloso chalet situado en lAs afueras de un pequeño pueblo rural. El entorno es espectacular, las vistas magníficas. ¡Cómprelo ahora!",
+                Arrays.asList(1, 7), 300, null, null, null));
 
         pictures = new ArrayList<PictureVO>();
         pictures.add(new PictureVO(1, "http://www.idealista.com/pictures/1", "SD"));
@@ -40,28 +47,25 @@ public class InMemoryPersistence {
         pictures.add(new PictureVO(6, "http://www.idealista.com/pictures/6", "SD"));
         pictures.add(new PictureVO(7, "http://www.idealista.com/pictures/7", "SD"));
         pictures.add(new PictureVO(8, "http://www.idealista.com/pictures/8", "HD"));
-        
+
         typologyTypesAllowed = new ArrayList<String>();
         typologyTypesAllowed.add("CHALET");
         typologyTypesAllowed.add("FLAT");
     }
 
-    
     public List<AdVO> findAds() {
-      return ads;
+        return ads;
     }
-    
+
     public List<PictureVO> findPictures() {
-    	return pictures;
+        return pictures;
     }
-    
+
     public List<String> findTypologyTypesAllowed() {
-    	return typologyTypesAllowed;
+        return typologyTypesAllowed;
     }
-    
+
     public Optional<PictureVO> fintPictureById(Integer pictureId) {
-    	return pictures.stream()
-	        .filter(p -> p.getId().equals(pictureId))
-	        .findFirst();
+        return pictures.stream().filter(p -> p.getId().equals(pictureId)).findFirst();
     }
 }
