@@ -1,4 +1,4 @@
-package com.idealista.infrastructure.service;
+package com.idealista.application.service;
 
 import java.util.List;
 
