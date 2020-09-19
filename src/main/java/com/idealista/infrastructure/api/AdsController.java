@@ -17,20 +17,20 @@ public class AdsController {
 	private AdService adService;
 
 	@GetMapping(value = "/ads/qualityListing")
-    public ResponseEntity<List<QualityAd>> qualityListing(@RequestParam(required = false) Boolean irrelevantAds) {
-		List<QualityAd> qualityAds = adService.getQualityListing(irrelevantAds);
-        return ResponseEntity.ok(qualityAds);
+	public ResponseEntity<List<QualityAd>> qualityListing(@RequestParam(required = false) Boolean irrelevantAds) {
+	    List<QualityAd> qualityAds = adService.getQualityListing(irrelevantAds);
+	    return ResponseEntity.ok(qualityAds);
     }
 
 	@GetMapping(value = "/ads/publicListing")
     public ResponseEntity<List<PublicAd>> publicListing(@RequestParam(required = false) Boolean orderBy) {
-		List<PublicAd> publicAds = adService.getPublicListing(orderBy);
-        return ResponseEntity.ok(publicAds);
+	    List<PublicAd> publicAds = adService.getPublicListing(orderBy);
+	    return ResponseEntity.ok(publicAds);
     }
 
 	@GetMapping(value = "/ads/calculateScore")
-    public ResponseEntity<Void> calculateScore() {
-		adService.calculateScore();
-        return ResponseEntity.noContent().build();
+	public ResponseEntity<Void> calculateScore() {
+	    adService.calculateScore();
+	    return ResponseEntity.noContent().build();
     }
 }

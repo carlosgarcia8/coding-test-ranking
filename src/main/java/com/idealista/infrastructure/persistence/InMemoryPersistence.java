@@ -61,7 +61,7 @@ public class InMemoryPersistence {
     
     public Optional<PictureVO> fintPictureById(Integer pictureId) {
     	return pictures.stream()
-	    	.filter(p -> p.getId().equals(pictureId))
+	        .filter(p -> p.getId().equals(pictureId))
 	        .findFirst();
     }
 }

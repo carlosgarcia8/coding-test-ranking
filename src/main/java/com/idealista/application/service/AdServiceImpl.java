@@ -30,7 +30,7 @@ public class AdServiceImpl implements AdService {
 
 	@Override
 	public List<PublicAd> getPublicListing(Boolean orderBy) {
-		logger.info("getPublicListing");
+	    logger.info("getPublicListing");
 		
 		List<AdVO> calculateAds = calculateScore();
 		List<PublicAd> publicListing = new ArrayList<PublicAd>();
@@ -71,13 +71,13 @@ public class AdServiceImpl implements AdService {
 
 	@Override
 	public List<AdVO> calculateScore() {
-		logger.info("calculateScore");
-		
-		List<AdVO> ads = inMemoryPersistance.findAds();
-		
-		return ads.stream().map(ad -> {
-			calculateAdScore(ad);
-		    return ad;
+	    logger.info("calculateScore");
+
+	    List<AdVO> ads = inMemoryPersistance.findAds();
+
+	    return ads.stream().map(ad -> {
+	        calculateAdScore(ad);
+	        return ad;
 	    }).collect(Collectors.toList());
 	}
 
@@ -147,26 +147,26 @@ public class AdServiceImpl implements AdService {
 	}
 	
 	private List<String> obtainSpecialWords() {
-		List<String> specialWords = new ArrayList<String>();
-        specialWords.add("Luminoso");
-        specialWords.add("Ático");
-        specialWords.add("Reformado");
-        specialWords.add("Céntrico");
-        specialWords.add("Nuevo");
-        
-        return specialWords;
+	    List<String> specialWords = new ArrayList<String>();
+	    specialWords.add("Luminoso");
+	    specialWords.add("Ático");
+	    specialWords.add("Reformado");
+	    specialWords.add("Céntrico");
+	    specialWords.add("Nuevo");
+	    
+	    return specialWords;
 	}
 	
 	private Integer obtainSpecialWordsScore(AdVO ad) {
-		if (ad.getDescription() == null) {
-			return 0;
-		}
-		
-		List<String> specialWords = obtainSpecialWords();
-		
-		specialWords.removeIf(specialWord -> !ad.getDescription().toLowerCase().contains(specialWord.toLowerCase()));
-		
-		return specialWords.size() * 5;
+	    if (ad.getDescription() == null) {
+		    return 0;
+	    }
+
+	    List<String> specialWords = obtainSpecialWords();
+	    
+	    specialWords.removeIf(specialWord -> !ad.getDescription().toLowerCase().contains(specialWord.toLowerCase()));
+	    
+	    return specialWords.size() * 5;
 	}
 	
 	private Integer obtainPicturesScore(AdVO ad) {
