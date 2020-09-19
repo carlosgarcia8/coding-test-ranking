@@ -33,7 +33,7 @@ public class AdServiceImpl implements AdService {
         logger.info("getPublicListing");
 
         List<AdVO> calculateAds = calculateScore();
-        List<PublicAd> publicListing = new ArrayList<PublicAd>();
+        List<PublicAd> publicListing = new ArrayList<>();
 
         // sort from best to worst score
         if (orderBy != null) {
@@ -54,14 +54,13 @@ public class AdServiceImpl implements AdService {
         logger.info("getQualityListing");
 
         List<AdVO> calculateAds = calculateScore();
-        List<QualityAd> qualityListing = new ArrayList<QualityAd>();
+        List<QualityAd> qualityListing = new ArrayList<>();
 
-        calculateAds.stream().filter(ad -> irrelevantAds != null && irrelevantAds ? true : ad.getScore() > 40)
-                .forEach(ad -> {
-                    QualityAd qualityAd = adMapper.convertAdVOToQualityAd(ad);
-                    qualityAd.setPictureUrls(obtainPictureUrl(ad));
-                    qualityListing.add(qualityAd);
-                });
+        calculateAds.stream().filter(ad -> irrelevantAds != null && irrelevantAds || ad.getScore() > 40).forEach(ad -> {
+            QualityAd qualityAd = adMapper.convertAdVOToQualityAd(ad);
+            qualityAd.setPictureUrls(obtainPictureUrl(ad));
+            qualityListing.add(qualityAd);
+        });
 
         return qualityListing;
     }
@@ -100,13 +99,10 @@ public class AdServiceImpl implements AdService {
     }
 
     public List<String> obtainPictureUrl(AdVO ad) {
-        List<String> pictureUrls = new ArrayList<String>();
+        List<String> pictureUrls = new ArrayList<>();
 
-        ad.getPictures().forEach(pictureId -> {
-            inMemoryPersistance.fintPictureById(pictureId).ifPresent((picture) -> {
-                pictureUrls.add(picture.getUrl());
-            });
-        });
+        ad.getPictures().forEach(pictureId -> inMemoryPersistance.fintPictureById(pictureId)
+                .ifPresent(picture -> pictureUrls.add(picture.getUrl())));
 
         return pictureUrls;
     }
@@ -125,25 +121,22 @@ public class AdServiceImpl implements AdService {
             return 0;
         }
 
-        if (ad.getTypology().equals(inMemoryPersistance.FLAT)) {
-            if (ad.getDescription().length() >= 20 && ad.getDescription().length() < 50) {
-                return 10;
-            } else if (ad.getDescription().length() >= 50) {
-                return 30;
-            }
+        if (ad.getTypology().equals(inMemoryPersistance.FLAT) && ad.getDescription().length() >= 20
+                && ad.getDescription().length() < 50) {
+            return 10;
+        } else if (ad.getDescription().length() >= 50) {
+            return 30;
         }
 
-        if (ad.getTypology().equals(inMemoryPersistance.CHALET)) {
-            if (ad.getDescription().length() > 50) {
-                return 20;
-            }
+        if (ad.getTypology().equals(inMemoryPersistance.CHALET) && ad.getDescription().length() > 50) {
+            return 20;
         }
 
         return 0;
     }
 
     private List<String> obtainSpecialWords() {
-        List<String> specialWords = new ArrayList<String>();
+        List<String> specialWords = new ArrayList<>();
         specialWords.add("Luminoso");
         specialWords.add("Ático");
         specialWords.add("Reformado");
